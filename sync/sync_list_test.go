@@ -38,7 +38,10 @@ func TestA(t *testing.T) {
 			}
 
 			log.Println("-----")
-			log.Print(list.Get(0))
+			log.Println(list.Get(0))
+
+			log.Println("-----")
+			log.Println(list.Size())
 		})
 	}
 }
