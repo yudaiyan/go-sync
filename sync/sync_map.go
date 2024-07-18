@@ -12,6 +12,7 @@ type SyncMap[K, V any] struct {
 type ISyncMap[K, V any] interface {
 	Store(key K, val V)
 	Load(key K) (V, bool)
+	LoadOrStore(key K, val V) (V, bool)
 	Delete(key K)
 	LoadAndDelete(key K) (V, bool)
 	Iter() iter.Seq2[K, V]
