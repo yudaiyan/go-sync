@@ -2,7 +2,10 @@ package sync
 
 import (
 	"iter"
+	"log"
 	"sync"
+
+	"github.com/go-errors/errors"
 )
 
 type SyncMap[K, V any] struct {
@@ -16,6 +19,7 @@ type ISyncMap[K, V any] interface {
 	Delete(key K)
 	LoadAndDelete(key K) (V, bool)
 	Iter() iter.Seq2[K, V]
+	ContainsKey(k K) bool
 }
 
 func (s *SyncMap[K, V]) Store(key K, val V) {
@@ -74,4 +78,39 @@ func (s *SyncMap[K, V]) Iter() iter.Seq2[K, V] {
 			}
 		}
 	}
+}
+
+func (s *SyncMap[K, V]) ContainsKey(k K) bool {
+	_, ok := s.Load(k)
+	return ok
+}
+
+func (s *SyncMap[K, V]) ContainsVal(v V) bool {
+	log.Println(errors.New("ContainsVal not support").ErrorStack())
+	return false
+}
+
+type ISyncMapComparableVal[K, V any, C comparable] interface {
+	ISyncMap[K, V]
+	ContainsVal(v V) bool
+}
+
+type SyncMapComparableVal[K, V any, C comparable] struct {
+	SyncMap[K, V]
+	ToComparable func(V) C
+}
+
+func (s *SyncMapComparableVal[K, V, C]) ContainsVal(v V) bool {
+	if s.ToComparable == nil {
+		log.Println(errors.New("not support, please implement ToComparable").ErrorStack())
+		return false
+	}
+
+	comparableV := s.ToComparable(v)
+	for _, val := range s.Iter() {
+		if s.ToComparable(val) == comparableV {
+			return true
+		}
+	}
+	return false
 }
