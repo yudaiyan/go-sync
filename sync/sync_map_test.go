@@ -1,7 +1,6 @@
 package sync
 
 import (
-	"log"
 	"testing"
 )
 
@@ -22,24 +21,24 @@ func TestSyncMap(t *testing.T) {
 			m.Store("c", 345)
 			m.Store("d", 456)
 			for k, v := range m.Iter() {
-				log.Println(k, v)
+				t.Log(k, v)
 			}
-			log.Println("-----")
+			t.Log("-----")
 
 			m.Store("e", 567)
 			for k, v := range m.Iter() {
-				log.Println(k, v)
+				t.Log(k, v)
 			}
 
-			log.Println("-----")
+			t.Log("-----")
 
 			m.Delete("e")
 			for k, v := range m.Iter() {
-				log.Println(k, v)
+				t.Log(k, v)
 			}
 
-			log.Println("-----")
-			log.Print(m.Load("a"))
+			t.Log("-----")
+			t.Log(m.Load("a"))
 		})
 	}
 }
