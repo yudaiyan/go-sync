@@ -15,9 +15,10 @@ type ISyncList[T comparable] interface {
 	Add(item T)
 	Get(i int) T
 	Remove(i int)
+	RemoveByVal(val T)
 	Find(val T) (int, bool)
-	Iter() iter.Seq2[int, T]
 	Size() int
+	Iter() iter.Seq2[int, T]
 }
 
 func (s *SyncList[T]) Add(item T) {

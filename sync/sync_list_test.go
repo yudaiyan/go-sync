@@ -1,7 +1,6 @@
 package sync
 
 import (
-	"log"
 	"testing"
 )
 
@@ -21,27 +20,31 @@ func TestA(t *testing.T) {
 			list.Add("b")
 			list.Add("c")
 			for _, item := range list.Iter() {
-				log.Println(item)
+				t.Log(item)
 			}
-			log.Println("-----")
+			t.Log("-----")
 
 			list.Add("d")
 			for _, item := range list.Iter() {
-				log.Println(item)
+				t.Log(item)
 			}
 
-			log.Println("-----")
+			t.Log("-----")
 
 			list.Remove(0)
 			for _, item := range list.Iter() {
-				log.Println(item)
+				t.Log(item)
 			}
 
-			log.Println("-----")
-			log.Println(list.Get(0))
+			t.Log("-----")
+			t.Log(list.Get(0))
 
-			log.Println("-----")
-			log.Println(list.Size())
+			t.Log("-----")
+			t.Log(list.Size())
+
+			list.RemoveByVal("b")
+			t.Log(list)
+
 		})
 	}
 }
