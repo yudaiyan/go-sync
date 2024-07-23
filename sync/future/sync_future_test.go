@@ -30,6 +30,10 @@ func runJobB() IFuture[error] {
 	return f
 }
 
+func runJobC() IFuture[error] {
+	return New[error](errors.New("超时C"))
+}
+
 func TestFuture(t *testing.T) {
 	future := runJobA()
 	// 其他 job
@@ -41,7 +45,7 @@ func TestFuture(t *testing.T) {
 func TestWaitError(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2000*time.Millisecond)
 	defer cancel()
-	err := WaitOneError(ctx, runJobA(), runJobB())
+	err := WaitOneError(ctx, runJobA(), runJobB(), runJobC())
 	if err != nil {
 		t.Log(err.(*errors.Error).ErrorStack())
 	}

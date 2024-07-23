@@ -29,10 +29,14 @@ func (f *future[T]) Set(result T) {
 	f.result <- result
 }
 
-func New[T any]() *future[T] {
-	return &future[T]{
-		result: make(chan T),
+func New[T any](t ...T) IFuture[T] {
+	f := &future[T]{
+		result: make(chan T, 1),
 	}
+	if len(t) > 0 {
+		f.Set(t[0])
+	}
+	return f
 }
 
 // 等待很多个Future中一个的结果（error）。
