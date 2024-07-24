@@ -13,7 +13,8 @@ func runJobA() IFuture[error] {
 
 	go func() {
 		time.Sleep(1 * time.Second)
-		f.Set(errors.New("超时A"))
+		// f.Set(errors.New("超时A"))
+		f.Set(nil)
 	}()
 
 	return f
@@ -24,14 +25,16 @@ func runJobB() IFuture[error] {
 
 	go func() {
 		time.Sleep(1 * time.Second)
-		f.Set(errors.New("超时B"))
+		// f.Set(errors.New("超时B"))
+		f.Set(nil)
 	}()
 
 	return f
 }
 
 func runJobC() IFuture[error] {
-	return New[error](errors.New("超时C"))
+	return New[error](nil)
+	// return New[error](errors.New("超时C"))
 }
 
 func TestFuture(t *testing.T) {
@@ -42,10 +45,10 @@ func TestFuture(t *testing.T) {
 	}
 }
 
-func TestWaitError(t *testing.T) {
+func TestWaitResult(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2000*time.Millisecond)
 	defer cancel()
-	err := WaitOneError(ctx, runJobA(), runJobB(), runJobC())
+	err := WaitResult(ctx, runJobA(), runJobB(), runJobC())
 	if err != nil {
 		t.Log(err.(*errors.Error).ErrorStack())
 	}
